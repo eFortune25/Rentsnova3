@@ -1,0 +1,47 @@
+import React from 'react';
+
+export function FaviconLogo() {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-full h-full"
+    >
+      {/* House Outline */}
+      <path
+        d="M4 28 V14 L16 4 L28 14 V28 H22 V18 H10 V28 H4 Z"
+        fill="#4aa5b6"
+        stroke="none"
+      />
+
+      {/* House Inner Area (White) */}
+      <path
+        d="M8 24 V16 L16 8 L24 16 V24 H8 Z"
+        fill="white"
+        stroke="none"
+      />
+
+      {/* Globe */}
+      <circle
+        cx="16"
+        cy="16"
+        r="6"
+        fill="#4aa5b6"
+      />
+
+      {/* Globe Grid Lines */}
+      <g fill="white" stroke="white" strokeWidth="0.8">
+        {/* Vertical lines */}
+        <line x1="16" y1="10" x2="16" y2="22" />
+        <line x1="13" y1="11" x2="13" y2="21" />
+        <line x1="19" y1="11" x2="19" y2="21" />
+
+        {/* Horizontal lines */}
+        <line x1="10" y1="16" x2="22" y2="16" />
+        <line x1="11" y1="13" x2="21" y2="13" />
+        <line x1="11" y1="19" x2="21" y2="19" />
+      </g>
+    </svg>
+  );
+}

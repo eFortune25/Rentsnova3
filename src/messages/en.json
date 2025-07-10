@@ -1,0 +1,182 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "about": "About",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "tagline": "Rent Smarter. Live Anywhere.",
+    "announcement": "🏠 Now Live in Cameroon - Starting the Revolution",
+    "title": "Modernizing Africa's",
+    "titleHighlight": "Housing Marketplace",
+    "subtitle": "Secure, transparent, and efficient property rentals and sales across Africa. Connect property owners, real estate agents, tenants and buyers through our comprehensive marketplace platform.",
+    "landlordButton": "I'm a Landlord",
+    "tenantButton": "I'm Looking to Rent",
+    "agentButton": "I'm an Agent"
+  },
+  "stats": {
+    "properties": "Available Properties",
+    "cities": "Cities Covered",
+    "tenants": "Active Tenants",
+    "digital": "Digital Management"
+  },
+  "properties": {
+    "title": "Available Properties",
+    "subtitle": "Discover verified properties for rent and sale across Cameroon's major cities",
+    "forRent": "For Rent",
+    "forSale": "For Sale",
+    "viewAll": "View All Properties",
+    "perMonth": "per month",
+    "bedrooms": "bedrooms",
+    "bathrooms": "bathrooms",
+    "area": "area"
+  },
+  "features": {
+    "title": "Built for African Markets",
+    "subtitle": "Addressing real challenges with technology designed specifically for African property markets",
+    "trust": {
+      "title": "Trust & Security",
+      "description": "Verified users, secure messaging, and payment protection for safe transactions",
+      "verification": "Identity verification required",
+      "escrow": "Secure payment escrow",
+      "fraud": "Fraud protection system"
+    },
+    "mobile": {
+      "title": "Mobile-First Design",
+      "description": "Optimized for smartphones with offline capabilities and fast loading",
+      "smartphone": "Works on any smartphone",
+      "connections": "Optimized for slow connections",
+      "languages": "French & English support"
+    },
+    "payments": {
+      "title": "Local Payments",
+      "description": "MTN Money, Orange Money, and bank transfers integrated seamlessly",
+      "mtn": "MTN Money integration",
+      "orange": "Orange Money support",
+      "bank": "Bank transfer options"
+    },
+    "quality": {
+      "title": "Quality Control",
+      "description": "Pay-to-apply system ensures serious applicants and reduces spam",
+      "applications": "Verified tenant applications",
+      "documents": "Document verification",
+      "background": "Background checks available"
+    },
+    "expertise": {
+      "title": "Local Expertise",
+      "description": "Deep understanding of Cameroonian market with plans for continental expansion",
+      "focus": "Cameroon market focus",
+      "network": "Local partnership network",
+      "compliance": "Regulatory compliance"
+    },
+    "premium": {
+      "title": "Premium Experience",
+      "description": "Professional property management with subscription-based services",
+      "collection": "Automated rent collection",
+      "maintenance": "Maintenance request system",
+      "analytics": "Analytics and reporting"
+    }
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "Choose the plan that works for you. Start free, upgrade as you grow.",
+    "popular": "Popular",
+    "getStarted": "Get Started",
+    "startFreeTrial": "Start Free Trial",
+    "basic": {
+      "title": "Basic User",
+      "price": "Free",
+      "description": "Perfect for browsing properties",
+      "features": [
+        "Browse rental & sale properties",
+        "Basic search filters",
+        "Contact property owners",
+        "Save favorites"
+      ]
+    },
+    "tenant": {
+      "title": "Tenant Premium",
+      "price": "2,000",
+      "currency": "FCFA",
+      "period": "/month",
+      "description": "Enhanced features for serious renters",
+      "features": [
+        "Everything in Basic",
+        "Priority application processing",
+        "Advanced search filters",
+        "Application tracking",
+        "Tenant protection insurance"
+      ]
+    },
+    "owner": {
+      "title": "Property Owner Pro",
+      "price": "10,000",
+      "currency": "FCFA",
+      "period": "/property/month",
+      "description": "Professional property management",
+      "features": [
+        "Unlimited rental & sale listings",
+        "Application & inquiry management",
+        "Automated rent collection",
+        "Buyer & tenant screening",
+        "Financial reporting"
+      ]
+    },
+    "agent": {
+      "title": "Real Estate Agent",
+      "price": "15,000",
+      "currency": "FCFA",
+      "period": "/month",
+      "description": "Professional agent tools + commission tracking",
+      "features": [
+        "Multi-property portfolio management",
+        "Client & landlord network",
+        "Commission tracking system",
+        "Lead generation tools",
+        "Performance analytics"
+      ],
+      "commission": "+ 2% commission on transactions"
+    }
+  },
+  "cta": {
+    "title": "Ready to Transform Your Property Experience?",
+    "subtitle": "Join thousands of landlords and tenants already using RentsNova to make property rental simple, secure, and transparent.",
+    "listProperty": "List Your Property",
+    "findHome": "Find Your Home"
+  },
+  "footer": {
+    "tagline": "Rent Smarter. Live Anywhere.",
+    "description": "Modernizing Africa's housing marketplace, starting with Cameroon.",
+    "platform": "Platform",
+    "company": "Company",
+    "legal": "Legal",
+    "forLandlords": "For Landlords",
+    "forTenants": "For Tenants",
+    "aboutUs": "About Us",
+    "contact": "Contact",
+    "support": "Support",
+    "blog": "Blog",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "security": "Security",
+    "copyright": "All rights reserved. Made with ❤️ for Africa."
+  },
+  "search": {
+    "placeholder": "Search rental properties by location...",
+    "allCities": "All Cities",
+    "propertyType": "Property Type",
+    "searchRentals": "Search Rentals"
+  },
+  "auth": {
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "email": "Email Address",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "createAccount": "Create Account",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?"
+  }
+}
