@@ -1,10 +1,47 @@
-# 🚀 RentsNova Vercel Deployment Checklist
+# 🚀 RentsNova Vercel Deployment Guide
 
-## Pre-Deployment Setup
+This guide will help you deploy RentsNova to Vercel with all necessary configurations.
 
-### ✅ 1. Database Configuration
+## 📋 Prerequisites
 
-**Option A: Vercel Postgres (Recommended)**
+Before deploying, ensure you have:
+
+1. **GitHub Repository**: Code pushed to GitHub
+2. **Vercel Account**: Sign up at [vercel.com](https://vercel.com)
+3. **Database**: PostgreSQL database (Vercel Postgres recommended)
+4. **Email Service**: Resend API key (recommended) or SMTP credentials
+5. **File Storage**: Cloudinary account for image uploads
+
+## 🛠️ Step 1: Prepare Database
+
+### Option A: Vercel Postgres (Recommended)
+
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Navigate to **Storage** tab
+3. Click **Create Database** → **Postgres**
+4. Name your database (e.g., `rentsnova-db`)
+5. Select region closest to your users
+6. Copy the connection strings provided
+
+### Option B: External PostgreSQL
+
+Use any PostgreSQL provider (Supabase, PlanetScale, AWS RDS, etc.)
+
+## 🔧 Step 2: Deploy to Vercel
+
+### Via Vercel Dashboard
+
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Click **Import Project**
+3. Connect your GitHub repository
+4. Configure project:
+   - **Framework Preset**: Next.js
+   - **Build Command**: `prisma generate && prisma db push && next build`
+   - **Install Command**: `bun install`
+   - **Root Directory**: `./` (if repo root)
+
+### Via Vercel CLI
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -12,216 +49,498 @@ npm i -g vercel
 # Login to Vercel
 vercel login
 
-# Create Postgres database
-vercel postgres create rentsnova-production
+# Deploy from project directory
+cd your-project-directory
+vercel
+
+# Follow the prompts
 ```
 
-**Option B: External PostgreSQL (Railway, Supabase, etc.)**
-- Create PostgreSQL database
-- Get connection string
-- Ensure database is accessible from Vercel
+## 🔐 Step 3: Configure Environment Variables
 
-### ✅ 2. Environment Variables Setup
+In your Vercel project dashboard, go to **Settings** → **Environment Variables** and add:
 
-Copy these environment variables to Vercel dashboard:
+### Required Variables
 
 ```bash
 # Database
-DATABASE_URL="postgresql://username:password@hostname:port/database?schema=public"
+DATABASE_URL="postgresql://username:password@host:port/db?schema=public&sslmode=require"
+DIRECT_URL="postgresql://username:password@host:port/db?schema=public&sslmode=require"
 
 # Authentication
-NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
-NEXTAUTH_URL="https://your-domain.vercel.app"
+NEXTAUTH_SECRET="your-32-character-random-secret"
+NEXTAUTH_URL="https://your-app.vercel.app"
 
-# Email (Required for magic links)
-EMAIL_SERVER_HOST="smtp.gmail.com"
-EMAIL_SERVER_PORT="587"
-EMAIL_SERVER_USER="your-email@gmail.com"
-EMAIL_SERVER_PASSWORD="your-gmail-app-password"
-EMAIL_FROM="noreply@rentsnova.com"
+# Email (Resend recommended)
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+EMAIL_FROM="noreply@your-domain.com"
 
-# File Upload
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your-cloudinary-name"
+# File Storage
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your-cloud-name"
 CLOUDINARY_API_KEY="your-api-key"
 CLOUDINARY_API_SECRET="your-api-secret"
+```
 
+### Generate Secure Values
+
+```bash
+# Generate NEXTAUTH_SECRET
+openssl rand -base64 32
+
+# Generate ENCRYPTION_KEY
+openssl rand -base64 32
+```
+
+### Optional Variables
+
+```bash
 # Payment Integration
 MTN_MONEY_API_KEY="your-mtn-api-key"
 ORANGE_MONEY_API_KEY="your-orange-api-key"
 
+# Communications
+TWILIO_ACCOUNT_SID="your-twilio-sid"
+TWILIO_AUTH_TOKEN="your-twilio-token"
+
 # Security
 ENCRYPTION_KEY="your-32-character-encryption-key"
+MAX_FAILED_LOGIN_ATTEMPTS=3
+LOCKOUT_DURATION_MINUTES=30
 
-# Environment
-NODE_ENV="production"
+# Analytics
+NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"
+NEXT_PUBLIC_VERCEL_ANALYTICS=true
 ```
 
-### ✅ 3. Code Preparation
+## 🗄️ Step 4: Database Setup
 
-- [x] Switch from SQLite to PostgreSQL
-- [x] Remove netlify.toml
-- [x] Add vercel.json configuration
-- [x] Update package.json scripts
-- [x] Configure Next.js for Vercel
-- [x] Add comprehensive README
+After deployment, run database migrations:
 
-## Deployment Steps
+### Option A: Via Vercel Functions
 
-### Method 1: GitHub Integration (Recommended)
+The app will automatically run `prisma db push` during build.
 
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Prepare for Vercel deployment"
-   git push origin main
-   ```
-
-2. **Connect to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "Import Project"
-   - Select your GitHub repository
-   - Configure build settings (auto-detected)
-
-3. **Set Environment Variables**
-   - Go to Project Settings > Environment Variables
-   - Add all variables from checklist above
-   - Set them for Production, Preview, and Development
-
-4. **Deploy**
-   - Vercel will automatically deploy
-   - Check build logs for any errors
-
-### Method 2: Vercel CLI
+### Option B: Manual Setup
 
 ```bash
-# Login and deploy
-vercel login
-vercel --prod
+# Clone your repository locally
+git clone https://github.com/your-username/rentsnova.git
+cd rentsnova
 
-# Follow prompts to configure project
-```
+# Install dependencies
+bun install
 
-## Post-Deployment Verification
+# Set up local environment
+cp .env.example .env.local
+# Edit .env.local with your production database URL
 
-### ✅ 1. Database Migration
-```bash
-# Run this after first deployment
-vercel env pull .env.local
+# Run database migrations
+bunx prisma generate
 bunx prisma db push
-bun run src/lib/seed-data.ts
+
+# Seed initial data (optional)
+bun run db:seed
 ```
 
-### ✅ 2. Test Core Features
+## 🌐 Step 5: Configure Custom Domain (Optional)
 
-- [ ] Homepage loads correctly
-- [ ] Search functionality works
-- [ ] Property listings display
-- [ ] Language switching (EN/FR)
-- [ ] Email signup flow (magic links)
-- [ ] Database connectivity
-- [ ] Image loading from CDN
+1. In Vercel Dashboard → **Settings** → **Domains**
+2. Add your custom domain
+3. Configure DNS:
+   - **Type**: CNAME
+   - **Name**: @ (for root domain) or www
+   - **Value**: cname.vercel-dns.com
+4. Wait for SSL certificate provisioning
 
-### ✅ 3. Performance Check
+## 📧 Step 6: Email Configuration
 
-- [ ] Page load speed < 3 seconds
-- [ ] Mobile responsiveness
-- [ ] Image optimization working
-- [ ] No console errors
+### Resend Setup (Recommended)
 
-### ✅ 4. Security Verification
+1. Sign up at [resend.com](https://resend.com)
+2. Verify your domain
+3. Generate API key
+4. Add `RESEND_API_KEY` to Vercel environment variables
 
-- [ ] HTTPS enabled
-- [ ] Security headers applied
-- [ ] Database connection secure
-- [ ] Environment variables hidden
+### SMTP Alternative
 
-## Common Issues & Solutions
+For Gmail or other SMTP providers:
 
-### Database Connection Issues
 ```bash
-# Check if database is accessible
-bunx prisma db push --preview-feature
-
-# Reset database if needed
-bunx prisma migrate reset
+EMAIL_SERVER_HOST="smtp.gmail.com"
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER="your-email@gmail.com"
+EMAIL_SERVER_PASSWORD="your-app-password"
 ```
 
-### Build Failures
+## 🖼️ Step 7: Cloudinary Setup
+
+1. Sign up at [cloudinary.com](https://cloudinary.com)
+2. Get your cloud name, API key, and API secret
+3. Add to Vercel environment variables
+4. Configure upload presets in Cloudinary dashboard
+
+## 🔍 Step 8: Verify Deployment
+
+1. **Health Check**: Visit `https://your-app.vercel.app/api/health`
+2. **Database**: Check if sign-up/sign-in works
+3. **Email**: Test magic link authentication
+4. **Images**: Test property image uploads
+5. **Payments**: Test in sandbox mode
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+#### Build Failures
+
 ```bash
-# Local build test
-npm run build
-
-# Check Vercel build logs
-vercel logs
+# Check build logs in Vercel dashboard
+# Common fixes:
+- Ensure all environment variables are set
+- Check for TypeScript errors
+- Verify Prisma schema syntax
 ```
 
-### Environment Variable Issues
-- Ensure all required variables are set in Vercel dashboard
-- Check variable names match exactly
-- Restart deployment after adding variables
+#### Database Connection Issues
 
-### Email Not Working
-- Verify Gmail app password (not regular password)
-- Check SMTP settings
-- Test email configuration locally first
-
-## Domain Configuration
-
-### Custom Domain Setup
-1. Add domain in Vercel dashboard
-2. Configure DNS records
-3. Update NEXTAUTH_URL environment variable
-4. Test authentication flow
-
-### SSL Certificate
-- Automatically handled by Vercel
-- Verify HTTPS redirect working
-
-## Monitoring & Maintenance
-
-### Analytics Setup
-- Enable Vercel Analytics
-- Configure error tracking
-- Set up performance monitoring
-
-### Regular Maintenance
-- Monitor database usage
-- Check error logs weekly
-- Update dependencies monthly
-- Review security settings
-
-## Rollback Plan
-
-### Quick Rollback
 ```bash
-# Revert to previous deployment
-vercel rollback
+# Verify connection strings
+# Ensure database allows connections from Vercel IPs
+# Check SSL requirements
 ```
 
-### Database Rollback
+#### Email Not Sending
+
 ```bash
-# If needed, restore from backup
-bunx prisma migrate reset
-# Re-seed with known good data
+# Verify API keys
+# Check domain verification for Resend
+# Test with SMTP fallback
 ```
 
-## Support Resources
+### Performance Optimization
 
-- [Vercel Documentation](https://vercel.com/docs)
-- [Next.js Deployment Guide](https://nextjs.org/docs/deployment)
-- [Prisma Vercel Guide](https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-vercel)
+1. **Database**: Use connection pooling with `DIRECT_URL`
+2. **Images**: Optimize Cloudinary settings
+3. **Caching**: Configure proper cache headers
+4. **Analytics**: Monitor with Vercel Analytics
 
----
+## 📊 Monitoring & Maintenance
 
-## 🎉 Post-Deployment Success Checklist
+### Set up monitoring:
 
-- [ ] Site accessible at production URL
-- [ ] All core features working
-- [ ] Database seeded with African countries/cities
-- [ ] Email authentication functional
-- [ ] Mobile experience optimized
-- [ ] Performance metrics acceptable
-- [ ] Security headers in place
-- [ ] Monitoring configured
+1. **Vercel Analytics**: Enabled by default
+2. **Error Tracking**: Add Sentry integration
+3. **Uptime Monitoring**: Use external service
+4. **Database Performance**: Monitor query times
 
-**Congratulations! RentsNova is live on Vercel! 🚀**
+### Regular Maintenance:
+
+1. **Dependencies**: Update regularly
+2. **Security**: Monitor for vulnerabilities
+3. **Backups**: Set up database backups
+4. **Logs**: Monitor error logs
+
+## 🔐 Security Checklist
+
+- [ ] All environment variables are secure
+- [ ] HTTPS is enforced
+- [ ] Database has proper access controls
+- [ ] API routes have proper authentication
+- [ ] File uploads are validated and sanitized
+- [ ] Rate limiting is implemented
+- [ ] Security headers are configured
+
+## 📞 Support
+
+For deployment issues:
+
+1. Check [Vercel Documentation](https://vercel.com/docs)
+2. Review [Next.js Deployment Guide](https://nextjs.org/docs/deployment)
+3. Check [Prisma Deployment Guide](https://www.prisma.io/docs/guides/deployment)
+4. Contact support through appropriate channels
+
+## 🎉 Success!
+
+Your RentsNova application should now be live and accessible at your Vercel URL. Users can now:
+
+- Sign up with email verification
+- Browse properties
+- Submit rental applications
+- Communicate with landlords
+- Manage rent payments
+
+Remember to test all functionality thoroughly before announcing to users!
+EOF  
+cd /home/project && cd Rentsnova3 && cat > DEPLOYMENT.md << 'EOF'
+# 🚀 RentsNova Vercel Deployment Guide
+
+This guide will help you deploy RentsNova to Vercel with all necessary configurations.
+
+## 📋 Prerequisites
+
+Before deploying, ensure you have:
+
+1. **GitHub Repository**: Code pushed to GitHub
+2. **Vercel Account**: Sign up at [vercel.com](https://vercel.com)
+3. **Database**: PostgreSQL database (Vercel Postgres recommended)
+4. **Email Service**: Resend API key (recommended) or SMTP credentials
+5. **File Storage**: Cloudinary account for image uploads
+
+## 🛠️ Step 1: Prepare Database
+
+### Option A: Vercel Postgres (Recommended)
+
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Navigate to **Storage** tab
+3. Click **Create Database** → **Postgres**
+4. Name your database (e.g., `rentsnova-db`)
+5. Select region closest to your users
+6. Copy the connection strings provided
+
+### Option B: External PostgreSQL
+
+Use any PostgreSQL provider (Supabase, PlanetScale, AWS RDS, etc.)
+
+## 🔧 Step 2: Deploy to Vercel
+
+### Via Vercel Dashboard
+
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Click **Import Project**
+3. Connect your GitHub repository
+4. Configure project:
+   - **Framework Preset**: Next.js
+   - **Build Command**: `prisma generate && prisma db push && next build`
+   - **Install Command**: `bun install`
+   - **Root Directory**: `./` (if repo root)
+
+### Via Vercel CLI
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy from project directory
+cd your-project-directory
+vercel
+
+# Follow the prompts
+```
+
+## 🔐 Step 3: Configure Environment Variables
+
+In your Vercel project dashboard, go to **Settings** → **Environment Variables** and add:
+
+### Required Variables
+
+```bash
+# Database
+DATABASE_URL="postgresql://username:password@host:port/db?schema=public&sslmode=require"
+DIRECT_URL="postgresql://username:password@host:port/db?schema=public&sslmode=require"
+
+# Authentication
+NEXTAUTH_SECRET="your-32-character-random-secret"
+NEXTAUTH_URL="https://your-app.vercel.app"
+
+# Email (Resend recommended)
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+EMAIL_FROM="noreply@your-domain.com"
+
+# File Storage
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+```
+
+### Generate Secure Values
+
+```bash
+# Generate NEXTAUTH_SECRET
+openssl rand -base64 32
+
+# Generate ENCRYPTION_KEY
+openssl rand -base64 32
+```
+
+### Optional Variables
+
+```bash
+# Payment Integration
+MTN_MONEY_API_KEY="your-mtn-api-key"
+ORANGE_MONEY_API_KEY="your-orange-api-key"
+
+# Communications
+TWILIO_ACCOUNT_SID="your-twilio-sid"
+TWILIO_AUTH_TOKEN="your-twilio-token"
+
+# Security
+ENCRYPTION_KEY="your-32-character-encryption-key"
+MAX_FAILED_LOGIN_ATTEMPTS=3
+LOCKOUT_DURATION_MINUTES=30
+
+# Analytics
+NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"
+NEXT_PUBLIC_VERCEL_ANALYTICS=true
+```
+
+## 🗄️ Step 4: Database Setup
+
+After deployment, run database migrations:
+
+### Option A: Via Vercel Functions
+
+The app will automatically run `prisma db push` during build.
+
+### Option B: Manual Setup
+
+```bash
+# Clone your repository locally
+git clone https://github.com/your-username/rentsnova.git
+cd rentsnova
+
+# Install dependencies
+bun install
+
+# Set up local environment
+cp .env.example .env.local
+# Edit .env.local with your production database URL
+
+# Run database migrations
+bunx prisma generate
+bunx prisma db push
+
+# Seed initial data (optional)
+bun run db:seed
+```
+
+## 🌐 Step 5: Configure Custom Domain (Optional)
+
+1. In Vercel Dashboard → **Settings** → **Domains**
+2. Add your custom domain
+3. Configure DNS:
+   - **Type**: CNAME
+   - **Name**: @ (for root domain) or www
+   - **Value**: cname.vercel-dns.com
+4. Wait for SSL certificate provisioning
+
+## 📧 Step 6: Email Configuration
+
+### Resend Setup (Recommended)
+
+1. Sign up at [resend.com](https://resend.com)
+2. Verify your domain
+3. Generate API key
+4. Add `RESEND_API_KEY` to Vercel environment variables
+
+### SMTP Alternative
+
+For Gmail or other SMTP providers:
+
+```bash
+EMAIL_SERVER_HOST="smtp.gmail.com"
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER="your-email@gmail.com"
+EMAIL_SERVER_PASSWORD="your-app-password"
+```
+
+## 🖼️ Step 7: Cloudinary Setup
+
+1. Sign up at [cloudinary.com](https://cloudinary.com)
+2. Get your cloud name, API key, and API secret
+3. Add to Vercel environment variables
+4. Configure upload presets in Cloudinary dashboard
+
+## 🔍 Step 8: Verify Deployment
+
+1. **Health Check**: Visit `https://your-app.vercel.app/api/health`
+2. **Database**: Check if sign-up/sign-in works
+3. **Email**: Test magic link authentication
+4. **Images**: Test property image uploads
+5. **Payments**: Test in sandbox mode
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+#### Build Failures
+
+```bash
+# Check build logs in Vercel dashboard
+# Common fixes:
+- Ensure all environment variables are set
+- Check for TypeScript errors
+- Verify Prisma schema syntax
+```
+
+#### Database Connection Issues
+
+```bash
+# Verify connection strings
+# Ensure database allows connections from Vercel IPs
+# Check SSL requirements
+```
+
+#### Email Not Sending
+
+```bash
+# Verify API keys
+# Check domain verification for Resend
+# Test with SMTP fallback
+```
+
+### Performance Optimization
+
+1. **Database**: Use connection pooling with `DIRECT_URL`
+2. **Images**: Optimize Cloudinary settings
+3. **Caching**: Configure proper cache headers
+4. **Analytics**: Monitor with Vercel Analytics
+
+## 📊 Monitoring & Maintenance
+
+### Set up monitoring:
+
+1. **Vercel Analytics**: Enabled by default
+2. **Error Tracking**: Add Sentry integration
+3. **Uptime Monitoring**: Use external service
+4. **Database Performance**: Monitor query times
+
+### Regular Maintenance:
+
+1. **Dependencies**: Update regularly
+2. **Security**: Monitor for vulnerabilities
+3. **Backups**: Set up database backups
+4. **Logs**: Monitor error logs
+
+## 🔐 Security Checklist
+
+- [ ] All environment variables are secure
+- [ ] HTTPS is enforced
+- [ ] Database has proper access controls
+- [ ] API routes have proper authentication
+- [ ] File uploads are validated and sanitized
+- [ ] Rate limiting is implemented
+- [ ] Security headers are configured
+
+## 📞 Support
+
+For deployment issues:
+
+1. Check [Vercel Documentation](https://vercel.com/docs)
+2. Review [Next.js Deployment Guide](https://nextjs.org/docs/deployment)
+3. Check [Prisma Deployment Guide](https://www.prisma.io/docs/guides/deployment)
+4. Contact support through appropriate channels
+
+## 🎉 Success!
+
+Your RentsNova application should now be live and accessible at your Vercel URL. Users can now:
+
+- Sign up with email verification
+- Browse properties
+- Submit rental applications
+- Communicate with landlords
+- Manage rent payments
+
+Remember to test all functionality thoroughly before announcing to users!
