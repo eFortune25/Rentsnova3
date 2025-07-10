@@ -210,3 +210,5 @@ RentsNova is specifically designed for African property markets with features li
 - Bilingual interface
 - Country-specific compliance
 - African city/region data
+
+- RentsNova designed with love for Africa
