@@ -1,0 +1,511 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  emailVerified     DateTime?
+  name              String?
+  phone             String?
+  phoneCountryCode  String?
+  role              UserRole @default(TENANT)
+  profileImage      String?
+  language          Language @default(ENGLISH)
+  country           String?
+  city              String?
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  properties        Property[]
+  tenantApplications TenantApplication[]
+  landlordApplications TenantApplication[] @relation("LandlordApplications")
+  sentMessages      Message[] @relation("SentMessages")
+  receivedMessages  Message[] @relation("ReceivedMessages")
+  conversations     ConversationParticipant[]
+  tourRequests      TourRequest[]
+  landlordTourRequests TourRequest[] @relation("LandlordTourRequests")
+  tenantAssignments TenantAssignment[]
+  landlordAssignments TenantAssignment[] @relation("LandlordAssignments")
+  rentPayments      RentPayment[]
+  adminSecuritySettings AdminSecuritySettings?
+  securityLogs      AdminSecurityLog[]
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+model AdminSecuritySettings {
+  id                    String   @id @default(cuid())
+  adminId               String   @unique
+  admin                 User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  twoFaEnabled          Boolean  @default(false)
+  totpSecretEncrypted   String?
+  backupCodesEncrypted  String?
+  ipWhitelistEnabled    Boolean  @default(false)
+  securityLevel         SecurityLevel @default(BASIC)
+  failedLoginAttempts   Int      @default(0)
+  lockedUntil           DateTime?
+  lastTwoFaSetup        DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("admin_security_settings")
+}
+
+model AdminIPWhitelist {
+  id          String   @id @default(cuid())
+  adminId     String
+  ipAddress   String
+  ipRange     String?
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  createdBy   String
+
+  @@map("admin_ip_whitelist")
+}
+
+model AdminSecurityLog {
+  id          String   @id @default(cuid())
+  adminId     String
+  admin       User     @relation(fields: [adminId], references: [id])
+  eventType   String
+  ipAddress   String?
+  userAgent   String?
+  details     String?
+  createdAt   DateTime @default(now())
+
+  @@map("admin_security_logs")
+}
+
+model Country {
+  id            String @id @default(cuid())
+  name          String
+  nameEn        String
+  nameFr        String
+  code          String @unique
+  phoneCode     String
+  currency      String
+  currencyCode  String
+  region        String
+  isActive      Boolean @default(true)
+
+  cities        City[]
+
+  @@map("countries")
+}
+
+model City {
+  id          String  @id @default(cuid())
+  name        String
+  nameEn      String
+  nameFr      String
+  countryId   String
+  country     Country @relation(fields: [countryId], references: [id])
+  region      String?
+  isActive    Boolean @default(true)
+
+  properties  Property[]
+
+  @@map("cities")
+}
+
+model Property {
+  id                String          @id @default(cuid())
+  title             String
+  titleEn           String?
+  titleFr           String?
+  description       String
+  descriptionEn     String?
+  descriptionFr     String?
+  type              PropertyType
+  listingType       ListingType
+  status            PropertyStatus  @default(AVAILABLE)
+
+  cityId            String
+  city              City            @relation(fields: [cityId], references: [id])
+  address           String
+  neighborhood      String?
+  latitude          Float?
+  longitude         Float?
+
+  bedrooms          Int
+  bathrooms         Int
+  area              Float
+  furnished         Boolean         @default(false)
+  hasParking        Boolean         @default(false)
+  hasPool           Boolean         @default(false)
+  hasGarden         Boolean         @default(false)
+
+  price             Float
+  currency          String          @default("FCFA")
+  pricePerMonth     Float?
+  securityDeposit   Float?
+  commission        Float?
+
+  images            PropertyImage[]
+  videos            PropertyVideo[]
+
+  ownerId           String
+  owner             User            @relation(fields: [ownerId], references: [id])
+
+  isVerified        Boolean         @default(false)
+  isFeatured        Boolean         @default(false)
+  viewCount         Int             @default(0)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  applications      TenantApplication[]
+  tourRequests      TourRequest[]
+  tenantAssignments TenantAssignment[]
+  conversations     Conversation[]
+
+  @@map("properties")
+}
+
+model PropertyImage {
+  id          String   @id @default(cuid())
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url         String
+  caption     String?
+  isPrimary   Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@map("property_images")
+}
+
+model PropertyVideo {
+  id          String   @id @default(cuid())
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url         String
+  caption     String?
+  thumbnail   String?
+  duration    Int?
+  createdAt   DateTime @default(now())
+
+  @@map("property_videos")
+}
+
+model TourRequest {
+  id                String           @id @default(cuid())
+  propertyId        String
+  property          Property         @relation(fields: [propertyId], references: [id])
+  requesterId       String
+  requester         User             @relation(fields: [requesterId], references: [id])
+  landlordId        String
+  landlord          User             @relation("LandlordTourRequests", fields: [landlordId], references: [id])
+
+  preferredDates    String
+  preferredTimeSlots String
+  message           String?
+  status            TourStatus       @default(PENDING)
+  confirmedDateTime DateTime?
+
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@map("tour_requests")
+}
+
+model TenantApplication {
+  id              String                @id @default(cuid())
+  propertyId      String
+  property        Property              @relation(fields: [propertyId], references: [id])
+  tenantId        String
+  tenant          User                  @relation(fields: [tenantId], references: [id])
+  landlordId      String
+  landlord        User                  @relation("LandlordApplications", fields: [landlordId], references: [id])
+
+  monthlyIncome   Float?
+  employmentInfo  String?
+  references      String?
+  message         String?
+
+  status          ApplicationStatus    @default(PENDING)
+  appliedAt       DateTime             @default(now())
+  reviewedAt      DateTime?
+
+  documents       ApplicationDocument[]
+
+  @@map("tenant_applications")
+}
+
+model ApplicationDocument {
+  id            String            @id @default(cuid())
+  applicationId String
+  application   TenantApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  fileName      String
+  fileUrl       String
+  fileType      String
+  fileSize      Int
+  documentType  DocumentType
+  uploadedAt    DateTime          @default(now())
+
+  @@map("application_documents")
+}
+
+model TenantAssignment {
+  id              String         @id @default(cuid())
+  propertyId      String
+  property        Property       @relation(fields: [propertyId], references: [id])
+  tenantId        String
+  tenant          User           @relation(fields: [tenantId], references: [id])
+  landlordId      String
+  landlord        User           @relation("LandlordAssignments", fields: [landlordId], references: [id])
+
+  leaseStartDate  DateTime
+  leaseEndDate    DateTime
+  monthlyRent     Float
+  securityDeposit Float?
+
+  rentDueDay      Int            @default(1)
+
+  status          LeaseStatus    @default(ACTIVE)
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  rentPayments    RentPayment[]
+  leaseDocuments  LeaseDocument[]
+
+  @@map("tenant_assignments")
+}
+
+model LeaseDocument {
+  id               String           @id @default(cuid())
+  tenantAssignmentId String
+  tenantAssignment TenantAssignment @relation(fields: [tenantAssignmentId], references: [id], onDelete: Cascade)
+
+  fileName         String
+  fileUrl          String
+  fileType         String
+  fileSize         Int
+  documentType     LeaseDocumentType
+  uploadedBy       String
+  uploadedAt       DateTime         @default(now())
+  isPrivate        Boolean          @default(true)
+
+  @@map("lease_documents")
+}
+
+model RentPayment {
+  id                String            @id @default(cuid())
+  tenantAssignmentId String
+  tenantAssignment  TenantAssignment  @relation(fields: [tenantAssignmentId], references: [id])
+  tenantId          String
+  tenant            User              @relation(fields: [tenantId], references: [id])
+
+  amount            Float
+  currency          String            @default("FCFA")
+  paymentMonth      String
+  dueDate           DateTime
+  paidDate          DateTime?
+
+  paymentMethod     PaymentMethod?
+  paymentReference  String?
+  proofUrl          String?
+
+  status            PaymentStatus     @default(PENDING)
+
+  electricityBill   Float?
+  waterBill         Float?
+  utilitiesProofUrl String?
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@map("rent_payments")
+}
+
+model Conversation {
+  id           String                   @id @default(cuid())
+  propertyId   String?
+  property     Property?                @relation(fields: [propertyId], references: [id])
+  lastMessage  String?
+  lastMessageAt DateTime?
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  joinedAt       DateTime     @default(now())
+
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId     String
+  receiver       User         @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  content        String
+  messageType    MessageType  @default(TEXT)
+  attachmentUrl  String?
+
+  isRead         Boolean      @default(false)
+  readAt         DateTime?
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@map("messages")
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+
+  type        NotificationType
+  title       String
+  message     String
+  data        String?
+
+  isRead      Boolean          @default(false)
+  readAt      DateTime?
+
+  createdAt   DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+enum UserRole {
+  TENANT
+  LANDLORD
+  AGENT
+  ADMIN
+}
+
+enum Language {
+  ENGLISH
+  FRENCH
+}
+
+enum SecurityLevel {
+  BASIC
+  ENHANCED
+  MAXIMUM
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  STUDIO
+  VILLA
+  PENTHOUSE
+  OFFICE
+  SHOP
+  WAREHOUSE
+  LAND
+}
+
+enum ListingType {
+  RENT
+  BUY
+  SALE
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+  INACTIVE
+}
+
+enum TourStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  COMPLETED
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum DocumentType {
+  ID_CARD
+  PASSPORT
+  INCOME_PROOF
+  EMPLOYMENT_LETTER
+  BANK_STATEMENT
+  REFERENCE_LETTER
+  OTHER
+}
+
+enum LeaseDocumentType {
+  LEASE_AGREEMENT
+  ID_COPY
+  INCOME_PROOF
+  DEPOSIT_RECEIPT
+  INVENTORY
+  OTHER
+}
+
+enum LeaseStatus {
+  ACTIVE
+  EXPIRED
+  TERMINATED
+  PENDING
+}
+
+enum PaymentMethod {
+  MTN_MONEY
+  ORANGE_MONEY
+  BANK_TRANSFER
+  CASH
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  LATE
+  FAILED
+  PARTIAL
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  DOCUMENT
+  SYSTEM
+}
+
+enum NotificationType {
+  RENT_DUE
+  PAYMENT_RECEIVED
+  APPLICATION_STATUS
+  TOUR_REQUEST
+  MESSAGE_RECEIVED
+  SYSTEM_ALERT
+}

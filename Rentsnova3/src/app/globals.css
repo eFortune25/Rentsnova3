@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* RentsNova Original Color Scheme - Orange & Black Only */
+    --background: 0 0% 100%; /* Pure White */
+    --foreground: 215 25% 27%; /* #1e2435 - Dark Navy/Black */
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 27%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 27%;
+    --primary: 18 87% 50%; /* #e45b12 - RentsNova Orange */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 18 87% 50%; /* Same orange - no secondary color */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 96%; /* Light gray for backgrounds */
+    --muted-foreground: 215 25% 27%;
+    --accent: 18 87% 50%; /* Orange for all accents */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%; /* Light border */
+    --input: 0 0% 90%;
+    --ring: 18 87% 50%; /* Orange focus ring */
+    --radius: 0.75rem;
+    --chart-1: 18 87% 50%;
+    --chart-2: 215 25% 27%;
+    --chart-3: 0 0% 60%;
+    --chart-4: 18 87% 40%;
+    --chart-5: 215 25% 40%;
+  }
+
+  .dark {
+    /* RentsNova Dark Mode - Orange & Black */
+    --background: 215 25% 11%; /* #1e2435 - Dark navy background */
+    --foreground: 0 0% 100%; /* White text */
+    --card: 215 25% 15%;
+    --card-foreground: 0 0% 100%;
+    --popover: 215 25% 15%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 18 87% 55%; /* Slightly lighter orange for dark mode */
+    --primary-foreground: 215 25% 11%;
+    --secondary: 18 87% 55%; /* Same orange */
+    --secondary-foreground: 215 25% 11%;
+    --muted: 215 15% 25%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 18 87% 55%; /* Orange accent */
+    --accent-foreground: 215 25% 11%;
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 15% 25%;
+    --input: 215 15% 25%;
+    --ring: 18 87% 55%;
+    --chart-1: 18 87% 55%;
+    --chart-2: 215 25% 27%;
+    --chart-3: 0 0% 70%;
+    --chart-4: 18 87% 40%;
+    --chart-5: 215 25% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* RentsNova Custom Styles - Original Orange & Black */
+@layer components {
+  .rentsnova-gradient {
+    background: hsl(18 87% 50%); /* Pure orange background */
+  }
+
+  .rentsnova-hero-bg {
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+  }
+
+  .rentsnova-footer {
+    background: hsl(215 25% 27%) !important; /* Dark navy footer */
+    color: hsl(0 0% 100%) !important;
+  }
+
+  .property-card {
+    @apply bg-card border border-border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  .property-card-image {
+    @apply aspect-[4/3] w-full object-cover;
+  }
+
+  .stat-number {
+    @apply text-4xl font-bold text-primary;
+  }
+
+  .feature-icon {
+    @apply w-12 h-12 text-primary;
+  }
+
+  .success-icon {
+    @apply text-primary; /* Orange instead of green */
+  }
+}
