@@ -1,0 +1,9 @@
+{
+  "buildCommand": "prisma generate && prisma db push && next build",
+  "installCommand": "bun install",
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}

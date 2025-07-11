@@ -1,0 +1,12 @@
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
+import EmailProvider from "next-auth/providers/email";
+import type { NextAuthConfig } from "next-auth";
+
+const authConfig: NextAuthConfig = {
+// ... existing code ... <adapter, providers, session, callbacks, pages, events configuration>
+};
+
+const handler = NextAuth(authConfig);
+export { handler as GET, handler as POST };

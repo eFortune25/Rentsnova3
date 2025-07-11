@@ -1,0 +1,182 @@
+{
+  "nav": {
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "about": "À Propos",
+    "signIn": "Se Connecter",
+    "getStarted": "Commencer"
+  },
+  "hero": {
+    "tagline": "Louer Plus Intelligemment. Vivre Partout.",
+    "announcement": "🏠 Maintenant Disponible au Cameroun - Début de la Révolution",
+    "title": "Modernisation du",
+    "titleHighlight": "Marché Immobilier Africain",
+    "subtitle": "Locations et ventes immobilières sécurisées, transparentes et efficaces à travers l'Afrique. Connectez propriétaires, agents immobiliers, locataires et acheteurs via notre plateforme marketplace complète.",
+    "landlordButton": "Je suis Propriétaire",
+    "tenantButton": "Je Cherche à Louer",
+    "agentButton": "Je suis Agent"
+  },
+  "stats": {
+    "properties": "Propriétés Disponibles",
+    "cities": "Villes Couvertes",
+    "tenants": "Locataires Actifs",
+    "digital": "Gestion Numérique"
+  },
+  "properties": {
+    "title": "Propriétés Disponibles",
+    "subtitle": "Découvrez des propriétés vérifiées à louer et à vendre dans les grandes villes du Cameroun",
+    "forRent": "À Louer",
+    "forSale": "À Vendre",
+    "viewAll": "Voir Toutes les Propriétés",
+    "perMonth": "par mois",
+    "bedrooms": "chambres",
+    "bathrooms": "salles de bain",
+    "area": "superficie"
+  },
+  "features": {
+    "title": "Conçu pour les Marchés Africains",
+    "subtitle": "Répondre aux vrais défis avec une technologie spécialement conçue pour les marchés immobiliers africains",
+    "trust": {
+      "title": "Confiance & Sécurité",
+      "description": "Utilisateurs vérifiés, messagerie sécurisée et protection des paiements pour des transactions sûres",
+      "verification": "Vérification d'identité requise",
+      "escrow": "Dépôt de garantie sécurisé",
+      "fraud": "Système de protection contre la fraude"
+    },
+    "mobile": {
+      "title": "Design Mobile-First",
+      "description": "Optimisé pour smartphones avec capacités hors ligne et chargement rapide",
+      "smartphone": "Fonctionne sur tout smartphone",
+      "connections": "Optimisé pour connexions lentes",
+      "languages": "Support Français & Anglais"
+    },
+    "payments": {
+      "title": "Paiements Locaux",
+      "description": "MTN Money, Orange Money et virements bancaires intégrés de manière transparente",
+      "mtn": "Intégration MTN Money",
+      "orange": "Support Orange Money",
+      "bank": "Options de virement bancaire"
+    },
+    "quality": {
+      "title": "Contrôle Qualité",
+      "description": "Système payant pour candidater garantit des candidats sérieux et réduit le spam",
+      "applications": "Candidatures locataires vérifiées",
+      "documents": "Vérification de documents",
+      "background": "Vérifications d'antécédents disponibles"
+    },
+    "expertise": {
+      "title": "Expertise Locale",
+      "description": "Compréhension approfondie du marché camerounais avec plans d'expansion continentale",
+      "focus": "Focus marché camerounais",
+      "network": "Réseau de partenaires locaux",
+      "compliance": "Conformité réglementaire"
+    },
+    "premium": {
+      "title": "Expérience Premium",
+      "description": "Gestion immobilière professionnelle avec services basés sur abonnement",
+      "collection": "Collecte automatisée des loyers",
+      "maintenance": "Système de demandes de maintenance",
+      "analytics": "Analyses et rapports"
+    }
+  },
+  "pricing": {
+    "title": "Tarification Simple et Transparente",
+    "subtitle": "Choisissez le plan qui vous convient. Commencez gratuitement, évoluez selon vos besoins.",
+    "popular": "Populaire",
+    "getStarted": "Commencer",
+    "startFreeTrial": "Essai Gratuit",
+    "basic": {
+      "title": "Utilisateur de Base",
+      "price": "Gratuit",
+      "description": "Parfait pour parcourir les propriétés",
+      "features": [
+        "Parcourir propriétés locatives et ventes",
+        "Filtres de recherche de base",
+        "Contacter les propriétaires",
+        "Sauvegarder les favoris"
+      ]
+    },
+    "tenant": {
+      "title": "Locataire Premium",
+      "price": "2,000",
+      "currency": "FCFA",
+      "period": "/mois",
+      "description": "Fonctionnalités améliorées pour locataires sérieux",
+      "features": [
+        "Tout dans Basique",
+        "Traitement prioritaire des candidatures",
+        "Filtres de recherche avancés",
+        "Suivi des candidatures",
+        "Assurance protection locataire"
+      ]
+    },
+    "owner": {
+      "title": "Propriétaire Pro",
+      "price": "10,000",
+      "currency": "FCFA",
+      "period": "/propriété/mois",
+      "description": "Gestion immobilière professionnelle",
+      "features": [
+        "Annonces locatives et ventes illimitées",
+        "Gestion candidatures et demandes",
+        "Collecte automatisée des loyers",
+        "Screening acheteurs et locataires",
+        "Rapports financiers"
+      ]
+    },
+    "agent": {
+      "title": "Agent Immobilier",
+      "price": "15,000",
+      "currency": "FCFA",
+      "period": "/mois",
+      "description": "Outils d'agent professionnel + suivi des commissions",
+      "features": [
+        "Gestion portefeuille multi-propriétés",
+        "Réseau clients et propriétaires",
+        "Système suivi des commissions",
+        "Outils génération de prospects",
+        "Analyses de performance"
+      ],
+      "commission": "+ 2% commission sur transactions"
+    }
+  },
+  "cta": {
+    "title": "Prêt à Transformer Votre Expérience Immobilière ?",
+    "subtitle": "Rejoignez des milliers de propriétaires et locataires utilisant déjà RentsNova pour rendre la location immobilière simple, sécurisée et transparente.",
+    "listProperty": "Inscrire Votre Propriété",
+    "findHome": "Trouver Votre Maison"
+  },
+  "footer": {
+    "tagline": "Louer Plus Intelligemment. Vivre Partout.",
+    "description": "Modernisation du marché immobilier africain, en commençant par le Cameroun.",
+    "platform": "Plateforme",
+    "company": "Entreprise",
+    "legal": "Légal",
+    "forLandlords": "Pour Propriétaires",
+    "forTenants": "Pour Locataires",
+    "aboutUs": "À Propos",
+    "contact": "Contact",
+    "support": "Support",
+    "blog": "Blog",
+    "privacy": "Politique de Confidentialité",
+    "terms": "Conditions d'Utilisation",
+    "security": "Sécurité",
+    "copyright": "Tous droits réservés. Fait avec ❤️ pour l'Afrique."
+  },
+  "search": {
+    "placeholder": "Rechercher propriétés locatives par lieu...",
+    "allCities": "Toutes les Villes",
+    "propertyType": "Type de Propriété",
+    "searchRentals": "Rechercher Locations"
+  },
+  "auth": {
+    "signUp": "S'inscrire",
+    "signIn": "Se Connecter",
+    "email": "Adresse Email",
+    "password": "Mot de Passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "createAccount": "Créer un Compte",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "noAccount": "Vous n'avez pas de compte ?"
+  }
+}
